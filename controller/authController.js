@@ -49,7 +49,7 @@ exports.user_create = async (req, res) => {
 }
 
 
-/*router.post("/forgot_password", async (req, res) => {
+exports.forgot_password = ("/forgot_password", async (req, res) => {
 	const { email }  = req.body;
 	try {
 		const user  = await User.findOne({email});
@@ -81,7 +81,7 @@ exports.user_create = async (req, res) => {
 		res.status(400).send({error:'Erro on forgot password, try again'});
 	}
 });
-*/
+
 exports.reset_password =  async (req, res) => {
 	const { email, token, password } = req.body;
 	

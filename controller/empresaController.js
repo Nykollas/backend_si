@@ -1,11 +1,23 @@
 const Empresa = require('../model/empresaSchema');
 const Hashtag = require('../model/hashtagSchema').HashtagModel;
+const Category = require('../model/categorySchema').CategoryModel;
 
 exports.empresa_create = async (req, res) => {
-
-
     const empresa = req.body;
+    const { category, hashtags} = empresa;
     empresa.hashtags = [];
+
+
+    //Cria categoria
+    Category.findOne({
+        category
+    }).then(async (doc) => {
+        if(!doc){
+            Category.create({category});
+            return;
+        }
+    });
+
     await hashtags.map(async (hashtag, index, arr) => {
         //Checa se já existe uma hastag
         await Hashtag.findOne({ name: hashtag.name }).then(async doc => {
@@ -14,7 +26,7 @@ exports.empresa_create = async (req, res) => {
                 const newHashtag = new Hashtag(hashtag);
                 await newHashtag.save().then((hashtag) => {
                     empresa.hashtags.push(hashtag);
-                });
+                }); 
             }
             //Caso exista uma hashtag adiciona ela na lista
             empresa.hashtags.push(doc);
@@ -33,7 +45,6 @@ exports.empresa_create = async (req, res) => {
 
 exports.empresa_update = async (req, res) => {
     const { hashtags, id } = req.body
-
     await hashtags.map(async (hashtag, index, arr) => {
         //Checa se já existe uma hastag
         await Hashtag.findOne({ name: hashtag.name }).then(async doc => {
