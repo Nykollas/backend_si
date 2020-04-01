@@ -1,21 +1,15 @@
 var express = require('express');
+const authMiddleware = require("../middlewares/auth");  
 var router = express.Router();
 
-/* GET users listing. */
-router.get('/user_data', function(req, res, next) {
-
-  res.status(200).send({
-    message:'0k'
-  })
-
-});
-
-router.post('/user_update', function(req, res, next) {
-
-  res.send('respond with a resource');
-
-});
+var authController = require('../controller/authController');
 
 
+
+router.post('/login', authController.login);
+router.post('/reset_password', authController.reset_password);
+router.post('/user_create', authController.user_create);
+
+router.use(authMiddleware);
 
 module.exports = router;
