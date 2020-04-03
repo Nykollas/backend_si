@@ -14,7 +14,7 @@ exports.user_create = async (req, res) => {
 	const { email } = req.body;
 	try{
 		if(await User.findOne({email}))
-            return res.status(400).send({error:'User already exists'});
+            return res.status(400).send({error:'Usuário já existe'});
         var hash = bcrypt.hashSync(req.body.password, 10);
         req.body.password = hash;
 		const  user = await  User.create(req.body);	
@@ -30,21 +30,26 @@ exports.user_create = async (req, res) => {
 
 
  exports.login = async (req, res) => {
-	const { email, password  }  = req.body;	
+	const { email, password  }  = req.body;
 	try{
+		let passwd = password;
 		const user =  await User.findOne({ email }).select('+password');
+		
+		
 		if(!user)
-            return res.status(400).send({error:'Not found!'});
-        console.log(password, user.password);
-		if(!await bcrypt.compareSync(password, user.password))
-			return  res.status(400).send({error:'Invalid password'});
+			return res.status(401).send({error:'Não encontrado!'});
+		if(!passwd)
+			passwd = "";
+		if(!await bcrypt.compareSync(passwd, user.password))
+			return  res.status(401).send({error:'Senha inválida'});
 		user.password = undefined;
-		res.send({
+		res.status(200).send({
 			user, 
 			token:generateToken({id:user.id})
 		})
 	}catch(err){
-		return res.status(400).send({error: 'Cannot login   '});
+		console.log({err});
+		return res.status(401).send({error: 'Não foi possível autenticar'});
 	}
 }
 
@@ -54,7 +59,7 @@ exports.forgot_password = ("/forgot_password", async (req, res) => {
 	try {
 		const user  = await User.findOne({email});
 		if(!user)
-			return res.status(400).send({error:'User not found'});
+			return res.status(200).send({error:'Email não encontrado'});
 		const token = crypto.randomBytes(20).toString('hex');
 		const now = new Date();
 		now.setHours(now.getHours() + 1);
@@ -72,13 +77,13 @@ exports.forgot_password = ("/forgot_password", async (req, res) => {
 			context:{token},
 		}, (err) => {
 			if(err) 
-				return res.status(400).send({error:'Cannot send forgot password, try again '})
+				return res.status(401).send({error:'Não foi possível recuperar a senha, tente novamente'})
 			return  res.send({text:"OK"});
 		});
 
 	}catch(err){
 		console.log(err);
-		res.status(400).send({error:'Erro on forgot password, try again'});
+		res.status(401).send({error:'Não foi possível recuperar a senha, tente novamente'});
 	}
 });
 
@@ -88,19 +93,23 @@ exports.reset_password =  async (req, res) => {
 	try {
 
 		const user  = User.findOne({ email })
+
 						  .select('+passwordResetToken passwordResetExpires');
+
 		user.then( async user =>{
+
 			console.log(user.passwordResetToken, token );		
+
 			if(!user) 
-				return res.status(400).send({error:'User not found!'});
+				return res.status(400).send({error:'Usuário não encontrado'});
 			
 			if(token !== user.passwordResetToken)
-				return res.status(400).send({error:'Token invalid'});
+				return res.status(400).send({error:'Token inválido!'});
 
 			const now = new Date();
 
 			if(now > user.passwordResetExpires)
-				return res.status(400).send({error:'Token expired, generate a new one'});
+				return res.status(400).send({error:'Token expirado gere um novo!'});
 			
 			user.password = password;
 
@@ -110,6 +119,6 @@ exports.reset_password =  async (req, res) => {
 						
 
 	}catch(error){
-		return res.status(400).send({error: 'Cannot reset password, try again'});
+		return res.status(400).send({error: 'Não foi possível redefinir a senha, tente novamente!'});
 	}
 }
