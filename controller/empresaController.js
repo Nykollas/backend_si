@@ -61,22 +61,23 @@ exports.empresa_update = async (req, res) => {
             //Busca a empresa pelo id
             Empresa.findOne({ _id: id }).then((doc) => {
                 //Atualiza seu documento com os dados do corpo da requisição
-                doc.update(req.body, (err, raw) => {
-                    if (err) {
-                        res.status(400).send(err);
-                    } else {
-                        res.status(200).send({ raw });
-                    }
-                });
+                doc.update(req.body);
             }).catch(err => {
-                res.status(400).send(err);
+                res.status(400).send({err:"Empresa não encontrada!"});
             });
         }
     });
 
 }
 exports.empresa_list = (req, res) => {
-
+        Empresa.find({}).then(empresas => {
+            
+            return res.status(200).send({
+                empresas
+            }).catch(err => {
+                return res.status(200).send({err});
+            })
+        })
 }
 exports.empresa_delete = (req, res) => {
 

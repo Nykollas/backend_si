@@ -4,11 +4,7 @@ var router = express.Router();
 var empresasController = require('../controller/empresaController');
 
 
-router.get('/list', function(req, res, next) {
-    res.status(200).send({
-        "message":"Ok",
-    });
-});
+router.get('/list', empresasController.empresa_list);
   
 router.post('/update', empresasController.empresa_update);
 
