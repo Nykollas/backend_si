@@ -7,7 +7,7 @@ const User = require('../model/userSchema');
 function generateToken(params = {}){
 	return jwt.sign(params, authConfig.secret,{
 		expiresIn:86400
-	})
+	});
 }
 
 exports.user_create = async (req, res) => {	
@@ -48,7 +48,7 @@ exports.user_create = async (req, res) => {
 			token:generateToken({id:user.id})
 		})
 	}catch(err){
-		console.log({err});
+		
 		return res.status(401).send({error: 'Não foi possível autenticar'});
 	}
 }
@@ -82,7 +82,7 @@ exports.forgot_password = ("/forgot_password", async (req, res) => {
 		});
 
 	}catch(err){
-		console.log(err);
+		
 		res.status(401).send({error:'Não foi possível recuperar a senha, tente novamente'});
 	}
 });
@@ -98,7 +98,7 @@ exports.reset_password =  async (req, res) => {
 
 		user.then( async user =>{
 
-			console.log(user.passwordResetToken, token );		
+				
 
 			if(!user) 
 				return res.status(400).send({error:'Usuário não encontrado'});
