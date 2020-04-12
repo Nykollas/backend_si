@@ -31,11 +31,11 @@ exports.user_create = async (req, res) => {
 
  exports.login = async (req, res) => {
 	const { email, password  }  = req.body;
+	console.log(email, password);
+
 	try{
 		let passwd = password;
 		const user =  await User.findOne({ email }).select('+password');
-		
-		
 		if(!user)
 			return res.status(401).send({error:'Não encontrado!'});
 		if(!passwd)
@@ -48,7 +48,6 @@ exports.user_create = async (req, res) => {
 			token:generateToken({id:user.id})
 		})
 	}catch(err){
-		
 		return res.status(401).send({error: 'Não foi possível autenticar'});
 	}
 }

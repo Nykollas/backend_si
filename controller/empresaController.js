@@ -7,7 +7,7 @@ exports.empresa_create = async (req, res) => {
     const { category, hashtags } = empresa;
     empresa.hashtags = [];
     empresa._id = null
-
+    res.set("Cache-Control", "no-cache");
     //Cria categoria
     Category.findOne({
         category
@@ -86,12 +86,10 @@ exports.empresa_update = async (req, res) => {
             res.status(400).send({ err: "Empresa não encontrada!" });
         });
     }
-
-
-
 }
 
 exports.empresa_list = (req, res) => {
+
     Empresa.find({}).then(empresas => {
 
         return res.status(200).send({
@@ -100,7 +98,16 @@ exports.empresa_list = (req, res) => {
     }).catch(err => {
         return res.status(200).send({ err });
     })
+
 }
+
 exports.empresa_delete = (req, res) => {
 
+        const { _id } = req.body;
+
+        res.set("Cache-Control", "no-cache");
+
+        Empresa.deleteOne({_id:_id}).then(doc => {
+            res.status(200).send({doc})
+        });
 }
