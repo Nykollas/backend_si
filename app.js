@@ -24,6 +24,6 @@ app.use('/empresas', empresasRouter);
 app.use('/users', userRouter);
 app.use('/login', authRouter);
 
-mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
+mongoose.connect('mongodb+srv://projetosi:projetosi@projetosi-kvwhk.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
 
 module.exports = app;

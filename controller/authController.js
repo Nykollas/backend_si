@@ -31,7 +31,7 @@ exports.user_create = async (req, res) => {
 
  exports.login = async (req, res) => {
 	const { email, password  }  = req.body;
-	console.log(email, password);
+
 
 	try{
 		let passwd = password;
@@ -96,27 +96,17 @@ exports.reset_password =  async (req, res) => {
 						  .select('+passwordResetToken passwordResetExpires');
 
 		user.then( async user =>{
-
-				
-
 			if(!user) 
 				return res.status(400).send({error:'Usuário não encontrado'});
-			
 			if(token !== user.passwordResetToken)
 				return res.status(400).send({error:'Token inválido!'});
-
 			const now = new Date();
-
 			if(now > user.passwordResetExpires)
 				return res.status(400).send({error:'Token expirado gere um novo!'});
-			
 			user.password = password;
-
 			await user.save();
 			res.status(200).send({text:'ok'});
 		});
-						
-
 	}catch(error){
 		return res.status(400).send({error: 'Não foi possível redefinir a senha, tente novamente!'});
 	}
