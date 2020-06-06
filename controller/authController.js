@@ -31,8 +31,6 @@ exports.user_create = async (req, res) => {
 
  exports.login = async (req, res) => {
 	const { email, password  }  = req.body;
-
-
 	try{
 		let passwd = password;
 		const user =  await User.findOne({ email }).select('+password');
@@ -68,7 +66,6 @@ exports.forgot_password = ("/forgot_password", async (req, res) => {
 				passwordResetExpires:now,
 			}
 		});
-		
 		mailer.sendMail({
 			to:email,
 			from:'nicolauarti11@gmail.com',
@@ -79,7 +76,6 @@ exports.forgot_password = ("/forgot_password", async (req, res) => {
 				return res.status(401).send({error:'Não foi possível recuperar a senha, tente novamente'})
 			return  res.send({text:"OK"});
 		});
-
 	}catch(err){
 		
 		res.status(401).send({error:'Não foi possível recuperar a senha, tente novamente'});
@@ -88,13 +84,9 @@ exports.forgot_password = ("/forgot_password", async (req, res) => {
 
 exports.reset_password =  async (req, res) => {
 	const { email, token, password } = req.body;
-	
 	try {
-
 		const user  = User.findOne({ email })
-
 						  .select('+passwordResetToken passwordResetExpires');
-
 		user.then( async user =>{
 			if(!user) 
 				return res.status(400).send({error:'Usuário não encontrado'});

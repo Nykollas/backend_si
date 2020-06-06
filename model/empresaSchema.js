@@ -13,6 +13,7 @@ const EmpresaSchema = new Schema({
   city: String,
   uf: String,
   tel: String,
+  img:String,
   hashtags:[Hashtag.HashtagSchema],
 });
 
