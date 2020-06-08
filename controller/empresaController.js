@@ -7,6 +7,7 @@ exports.empresa_create = async (req, res) => {
     const { category, hashtags } = empresa;
     empresa.hashtags = [];
     res.set("Cache-Control", "no-cache");
+    res.set("Access-Control-Allow-Origin", "*");
     Category.findOne({
         category
     }).then(async (doc) => {
@@ -35,7 +36,7 @@ exports.empresa_create = async (req, res) => {
             if (arr.length - 1 == index) {
                 //Cria empresa
                 Empresa.create(empresa).then((err, created_empresa) => {
-                    console.log(created_empresa);
+                    
                     if(err){
                         res.status(400).send(err);
                     }
@@ -46,14 +47,14 @@ exports.empresa_create = async (req, res) => {
     } else {
         //Cria empresa
         Empresa.create(empresa).then((created_empresa) => {
-            console.log(created_empresa);
             res.status(200).send(created_empresa);
         });
     }
 }
 
 exports.empresa_update = async (req, res) => {
-    const { hashtags, _id } = req.body
+    const { hashtags, _id } = req.body;
+    res.set("Access-Control-Allow-Origin", "*");
     if (hashtags) {
         await hashtags.map(async (hashtag, index, arr) => {
             //Checa se já existe uma hastag
@@ -87,7 +88,7 @@ exports.empresa_update = async (req, res) => {
 }
 
 exports.empresa_list = (req, res) => {
-
+    res.set("Access-Control-Allow-Origin", "*");
     Empresa.find({}).then(empresas => {
 
         return res.status(200).send({
@@ -104,6 +105,7 @@ exports.empresa_delete = (req, res) => {
         const { _id } = req.body;
 
         res.set("Cache-Control", "no-cache");
+        res.set("Access-Control-Allow-Origin", "*");
 
         Empresa.deleteOne({_id:_id}).then(doc => {
             res.status(200).send({doc})
