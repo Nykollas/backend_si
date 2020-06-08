@@ -6,7 +6,6 @@ exports.empresa_create = async (req, res) => {
     const empresa = req.body;
     const { category, hashtags } = empresa;
     empresa.hashtags = [];
-    empresa._id = null
     res.set("Cache-Control", "no-cache");
     Category.findOne({
         category
