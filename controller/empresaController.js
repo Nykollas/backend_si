@@ -8,7 +8,6 @@ exports.empresa_create = async (req, res) => {
     empresa.hashtags = [];
     empresa._id = null
     res.set("Cache-Control", "no-cache");
-    //Cria categoria
     Category.findOne({
         category
     }).then(async (doc) => {
@@ -37,7 +36,10 @@ exports.empresa_create = async (req, res) => {
             //Chegou no último item
             if (arr.length - 1 == index) {
                 //Cria empresa
-                Empresa.create(empresa).then((created_empresa) => {
+                Empresa.create(empresa).then((err, created_empresa) => {
+                    if(err){
+                        res.status(400).send(err);
+                    }
                     res.status(200).send(created_empresa);
                 });
             }
