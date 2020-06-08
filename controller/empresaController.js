@@ -15,7 +15,6 @@ exports.empresa_create = async (req, res) => {
             return;
         }
     });
-
     if (hashtags && hashtags > 0) {
         await hashtags.map(async (hashtag, index, arr) => {
             //Checa se já existe uma hastag
@@ -36,6 +35,7 @@ exports.empresa_create = async (req, res) => {
             if (arr.length - 1 == index) {
                 //Cria empresa
                 Empresa.create(empresa).then((err, created_empresa) => {
+                    console.log(created_empresa);
                     if(err){
                         res.status(400).send(err);
                     }
@@ -44,9 +44,9 @@ exports.empresa_create = async (req, res) => {
             }
         });
     } else {
-
         //Cria empresa
         Empresa.create(empresa).then((created_empresa) => {
+            console.log(created_empresa);
             res.status(200).send(created_empresa);
         });
     }
@@ -54,7 +54,6 @@ exports.empresa_create = async (req, res) => {
 
 exports.empresa_update = async (req, res) => {
     const { hashtags, _id } = req.body
-
     if (hashtags) {
         await hashtags.map(async (hashtag, index, arr) => {
             //Checa se já existe uma hastag
@@ -72,14 +71,12 @@ exports.empresa_update = async (req, res) => {
                 //Busca a empresa pelo id
                 Empresa.findOneAndUpdate({ _id: _id }, { $set: req.body }).then((doc) => {
                     //Atualiza seu documento com os dados do corpo da requisição
-                    
                 }).catch(err => {
                     res.status(400).send({ err: "Empresa não encontrada!" });
                 });
             }
         });
     } else {
-
         Empresa.findOneAndUpdate({ _id: _id }, { $set: req.body }).then(doc => {
             res.status(200).send({ doc });
         }).catch(err => {
