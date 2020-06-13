@@ -7,7 +7,7 @@ const EmpresaSchema = new Schema({
   id_: ObjectId,
   name: String,
   email: String,
-  category: Category.CategorySchema,
+  category: String,
   street: String,
   place: String,
   city: String,

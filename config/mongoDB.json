@@ -1,0 +1,3 @@
+{
+    "connectionString":"mongodb+srv://projetosi:projetosi@projetosi-kvwhk.mongodb.net/test?retryWrites=true&w=majority"
+}

@@ -9,6 +9,9 @@ var empresasRouter = require('./routes/empresas');
 var userRouter = require('./routes/users');
 var authRouter = require('./routes/auth')
 
+var connectionString = require('./config/mongoDB.json').connectionString;
+
+
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -21,6 +24,6 @@ app.use('/empresas', empresasRouter);
 app.use('/users', userRouter);
 app.use('/login', authRouter);
 
-mongoose.connect('mongodb+srv://projetosi:projetosi@projetosi-kvwhk.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
+mongoose.connect(connectionString, {useNewUrlParser: true});
 
 module.exports = app;
