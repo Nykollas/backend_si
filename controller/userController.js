@@ -17,10 +17,10 @@ function errorCallback (err)  {
 
 exports.user_update = function (req, res, next) {
     const userId = req.body.id;
-    const newName = req.body.name;
-    const newEmail = req.body.email;
-    const actualPassword = req.body.actualPassword;
-    const newPassword =   req.body.newPassword;
+    const newName = req.body.userName;
+    const newEmail = req.body.userEmail;
+    const actualPassword = req.body.password;
+    const newPassword =   req.body.passwordConfirmation;
     const newData = { 
         name: newName,
         password: newPassword,
@@ -28,20 +28,35 @@ exports.user_update = function (req, res, next) {
     };
     UserModel.findOne({_id:userId}, async (err, user) => {
         if(err){
-            res.status(400).send({
+            return res.status(400).send({
                 message: "Usuário não encontrado"
             });
             return
         }
         if(!validPassword(user.password, actualPassword)){
-            res.status(400).send({
+            return res.status(400).send({
                 message:'Senha inválida'
             })
         }
         else if(user && user.updateOne){
             await UserModel.updateOne( { _id: userId }, newData, errorCallback);
-            res.status(200).send("Atualizado com sucesso");
-            return;
+            return res.status(200).send("Atualizado com sucesso");
+            
         }
     });
+}
+
+exports.user_show = function (req, res, next) {
+    console.log(req);
+    /*
+    UserModel.findOne({_id:userId}, async (err, user) => {
+        if(err){
+            return res.status(400).send({
+                message: "Usuário não encontrado"
+            });
+            return
+        }
+        return res.status(200).send(user);
+
+    });*/
 }
