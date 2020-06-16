@@ -22,8 +22,8 @@ exports.user_update = function (req, res, next) {
     const userId = req.body.id;
     const newName = req.body.userName;
     const newEmail = req.body.userEmail;
-    const actualPassword = req.body.password;
-    const newPassword =   req.body.passwordConfirmation;
+    const actualPassword = req.body.actualPassword;
+    const newPassword =   req.body.newPassword;
     const newData = { 
         name: newName,
         password: newPassword,
@@ -43,7 +43,7 @@ exports.user_update = function (req, res, next) {
         }
         else if(user && user.updateOne){
             await UserModel.updateOne( { _id: userId }, newData, errorCallback);
-            return res.status(200).send("Atualizado com sucesso");
+            return res.status(200).send({message:"Atualizado com sucesso"});
             
         }else{
             return res.status(400).send({
@@ -63,7 +63,8 @@ exports.user_show = function (req, res, next) {
             });
             return
         }
-        return res.status(200).send(user);
+        const { _id, email } = user;
+        return res.status(200).send({_id, email});
 
     });
 }
