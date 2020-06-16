@@ -3,7 +3,7 @@ const UserModel = require('../model/userSchema');
 
 //Controller atualizar usuário
 function validPassword(password, actualPassword){
-    if(user && password !== actualPassword)
+    if( password !== actualPassword)
         return false;
     return true;
 }
@@ -36,7 +36,6 @@ exports.user_update = function (req, res, next) {
             });
             
         }
-        console.log(userId, user);
         if(!validPassword(user.password, actualPassword)){
             return res.status(400).send({
                 message:'Senha inválida'
