@@ -19,7 +19,7 @@ exports.user_update = function (req, res, next) {
     
     res.set("Access-Control-Allow-Origin", "*");
 
-    const userId = req.body.id;
+    const userId = req.body.userId;
     const newName = req.body.userName;
     const newEmail = req.body.userEmail;
     const actualPassword = req.body.actualPassword;
@@ -34,8 +34,9 @@ exports.user_update = function (req, res, next) {
             return res.status(400).send({
                 message: "Usuário não encontrado"
             });
-            return
+            
         }
+        console.log(userId, user);
         if(!validPassword(user.password, actualPassword)){
             return res.status(400).send({
                 message:'Senha inválida'
