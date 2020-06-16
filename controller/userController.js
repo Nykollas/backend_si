@@ -16,6 +16,9 @@ function errorCallback (err)  {
 }
 
 exports.user_update = function (req, res, next) {
+    
+    res.set("Access-Control-Allow-Origin", "*");
+
     const userId = req.body.id;
     const newName = req.body.userName;
     const newEmail = req.body.userEmail;
@@ -51,6 +54,7 @@ exports.user_update = function (req, res, next) {
 }
 
 exports.user_show = function (req, res, next) {
+    res.set("Access-Control-Allow-Origin", "*");
     let userId = req.query.id;
     UserModel.findOne({_id:userId}, async (err, user) => {
         if(err){
