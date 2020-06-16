@@ -42,13 +42,16 @@ exports.user_update = function (req, res, next) {
             await UserModel.updateOne( { _id: userId }, newData, errorCallback);
             return res.status(200).send("Atualizado com sucesso");
             
+        }else{
+            return res.status(400).send({
+                message:'Erro'
+            })
         }
     });
 }
 
 exports.user_show = function (req, res, next) {
-    console.log(req);
-    /*
+    let userId = req.query.id;
     UserModel.findOne({_id:userId}, async (err, user) => {
         if(err){
             return res.status(400).send({
@@ -58,5 +61,5 @@ exports.user_show = function (req, res, next) {
         }
         return res.status(200).send(user);
 
-    });*/
+    });
 }
