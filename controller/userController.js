@@ -1,11 +1,9 @@
 const UserModel = require('../model/userSchema');
-
+const bcrypt = require('bcryptjs');
 
 //Controller atualizar usuário
 function validPassword(password, actualPassword){
-    if( password !== actualPassword)
-        return false;
-    return true;
+    return bcrypt.compareSync(password, actualPassword)
 }
 
 function errorCallback (err)  {
@@ -22,8 +20,8 @@ exports.user_update = function (req, res, next) {
     const userId = req.body.userId;
     const newName = req.body.userName;
     const newEmail = req.body.userEmail;
-    const actualPassword = req.body.actualPassword;
-    const newPassword =   req.body.newPassword;
+    const actualPassword = req.body.hashedActualPassword;
+    const newPassword =   req.body.hashedNewPassword;
     const newData = { 
         name: newName,
         password: newPassword,
